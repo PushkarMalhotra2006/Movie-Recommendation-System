@@ -1,5 +1,6 @@
 import requests
 import streamlit as st
+import streamlit.components.v1 as components
 
 # =============================
 # CONFIG
@@ -8,6 +9,15 @@ API_BASE = "https://movie-recommendation-system-sn0l.onrender.com/" or "http://1
 TMDB_IMG = "https://image.tmdb.org/t/p/w500"
 
 st.set_page_config(page_title="Movie Recommender", page_icon="🎬", layout="wide")
+st.markdown("<div id='top'></div>", unsafe_allow_html=True)
+components.html(
+    """
+    <script>
+        window.parent.scrollTo(0, 0);
+    </script>
+    """,
+    height=0,
+)
 
 # =============================
 # STYLES (minimal modern)
@@ -95,7 +105,7 @@ def poster_grid(cards, cols=6, key_prefix="grid"):
 
             with colset[c]:
                 if poster:
-                    st.image(poster, use_container_width='stretch')
+                    st.image(poster, use_container_width=True)
                 else:
                     st.write("🖼️ No poster")
 
@@ -256,7 +266,7 @@ if st.session_state.view == "home":
                     suggestion_cols = st.columns(min(5, len(suggestions)))
                     for idx, (label, tmdb_id) in enumerate(suggestions[:5]):
                         with suggestion_cols[idx % 5]:
-                            if st.button(label, key=f"suggestion_{tmdb_id}_{idx}", use_container_width='stretch'):
+                            if st.button(label, key=f"suggestion_{tmdb_id}_{idx}", use_container_width=True):
                                 goto_details(tmdb_id)
                 else:
                     st.info("No suggestions found. Try another keyword.")
@@ -311,7 +321,7 @@ elif st.session_state.view == "details":
     with left:
         st.markdown("<div class='card'>", unsafe_allow_html=True)
         if data.get("poster_url"):
-            st.image(data["poster_url"], use_container_width='stretch')
+            st.image(data["poster_url"], use_container_width=True)
         else:
             st.write("🖼️ No poster")
         st.markdown("</div>", unsafe_allow_html=True)
@@ -334,7 +344,7 @@ elif st.session_state.view == "details":
 
     if data.get("backdrop_url"):
         st.markdown("#### Backdrop")
-        st.image(data["backdrop_url"], use_container_width='stretch')
+        st.image(data["backdrop_url"], use_container_width=True)
 
     st.divider()
     st.markdown("### ✅ Recommendations")
